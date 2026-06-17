@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<meta name="description" content="EaglercraftX Community Test Build (Minecraft-style browser game)" />
+<meta name="keywords" content="eaglercraft, eaglercraftx, minecraft, browser game, community" />
+
+<title>EaglercraftX Community Build</title>
+
+<meta property="og:locale" content="en-US" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="EaglercraftX Community Build" />
+<meta property="og:description" content="Browser-based Minecraft-style community project" />
+
+<link type="image/png" rel="shortcut icon" href="favicon.png" />
+
+<script type="text/javascript" src="classes.js"></script>
+
+<script type="text/javascript">
+"use strict";
+
+window.addEventListener("load", () => {
+
+    if (document.location.protocol === "file:") {
+        alert("Please run this via HTTP server (not file://)");
+        return;
+    }
+
+    const relayId = Math.floor(Math.random() * 3);
+
+    window.eaglercraftXOpts = {
+        demoMode: false,
+        container: "game_frame",
+        assetsURI: "assets.epk",
+        localesURI: "lang/",
+        worldsDB: "worlds",
+        logInvalidCerts: true,
+
+        servers: [
+            {
+                addr: "ws" + window.location.href.slice(4),
+                name: "Community Server"
+            }
+        ],
+
+        relays: [
+            { addr: "wss://relay.deev.is/", primary: relayId === 0 },
+            { addr: "wss://relay.lax1dude.net/", primary: relayId === 1 },
+            { addr: "wss://relay.shhnowisnottheti.me/", primary: relayId === 2 }
+        ]
+    };
+
+    let q = new URLSearchParams(window.location.search);
+    let s = q.get("server");
+    if (s) window.eaglercraftXOpts.joinServer = s;
+
+    main();
+});
+</script>
+
+</head>
+
+<body style="margin:0;width:100vw;height:100vh;overflow:hidden;" id="game_frame">
+</body>
+</html>
